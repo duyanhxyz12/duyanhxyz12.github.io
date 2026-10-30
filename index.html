@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duy Anh — Developer Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --pink: #ff69b4;
+    --pink-light: #ffb6d9;
+    --pink-dark: #d63384;
+    --pink-glow: rgba(255, 105, 180, 0.5);
+    --bg-dark: #0d0d14;
+    --text: #f5e6f0;
+  }
+
+  body {
+    min-height: 100vh;
+    background: radial-gradient(ellipse at top, #2a0d1f 0%, #0d0d14 60%);
+    font-family: 'Rajdhani', sans-serif;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px 100px 20px;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, var(--pink-glow), transparent),
+      radial-gradient(2px 2px at 80% 20%, var(--pink-glow), transparent),
+      radial-gradient(1px 1px at 50% 70%, var(--pink-light), transparent),
+      radial-gradient(2px 2px at 90% 80%, var(--pink-glow), transparent);
+    background-size: 200% 200%;
+    animation: twinkle 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  #splash-screen {
+    position: fixed; inset: 0; background: #0d0d14; z-index: 9999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  
+  #splash-screen.hidden { opacity: 0; visibility: hidden; }
+
+  .splash-content { text-align: center; animation: pulseText 2s infinite; }
+
+  .splash-title {
+    font-family: 'Orbitron', sans-serif; font-size: 24px; color: var(--pink);
+    letter-spacing: 3px; margin-bottom: 10px; text-shadow: 0 0 20px var(--pink-glow);
+  }
+  
+  .splash-sub { font-size: 14px; color: #a08a9a; letter-spacing: 1px; }
+
+  @keyframes pulseText { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } }
+
+  .music-bar {
+    position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
+    width: calc(100% - 30px); max-width: 480px;
+    background: rgba(20, 20, 30, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 105, 180, 0.3); border-radius: 16px; padding: 10px 15px;
+    display: flex; align-items: center; gap: 15px; z-index: 1000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 105, 180, 0.1);
+    transition: transform 0.4s ease;
+  }
+
+  .music-cover {
+    width: 50px; height: 50px; border-radius: 8px; object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5); flex-shrink: 0;
+  }
+
+  .music-info { flex: 1; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+
+  .song-title {
+    font-size: 15px; font-weight: 700; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px;
+  }
+
+  .song-artist {
+    font-size: 12px; color: #8a7580; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    display: flex; align-items: center; gap: 5px;
+  }
+
+  .playing-bars { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+  .playing-bars span { width: 2px; background: var(--pink); border-radius: 2px; height: 20%; }
+  
+  .music-bar.is-playing .playing-bars span:nth-child(1) { animation: bounce 1s ease-in-out infinite; }
+  .music-bar.is-playing .playing-bars span:nth-child(2) { animation: bounce 1s ease-in-out infinite 0.2s; }
+  .music-bar.is-playing .playing-bars span:nth-child(3) { animation: bounce 1s ease-in-out infinite 0.4s; }
+  .music-bar.is-playing .playing-bars span:nth-child(4) { animation: bounce 1s ease-in-out infinite 0.6s; }
+
+  @keyframes bounce { 0%, 100% { height: 20%; } 50% { height: 100%; } }
+
+  .play-btn {
+    width: 45px; height: 45px; background: #fff; border-radius: 50%; border: none;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    flex-shrink: 0; transition: transform 0.2s ease, background 0.3s;
+  }
+
+  .play-btn:hover { transform: scale(1.05); background: var(--pink-light); }
+  .play-btn svg { width: 20px; height: 20px; fill: #000; }
+
+  .icon-pause { display: none; }
+  .music-bar.is-playing .icon-play { display: none; }
+  .music-bar.is-playing .icon-pause { display: block; }
+
+  .profile-card {
+    position: relative; z-index: 1; max-width: 480px; width: 100%;
+    background: rgba(255, 105, 180, 0.06); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 105, 180, 0.3); border-radius: 24px; padding: 45px 35px 35px;
+    box-shadow: 0 20px 60px rgba(255, 105, 180, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    text-align: center; animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+  .avatar-wrapper { position: relative; width: 130px; height: 130px; margin: 0 auto 22px; }
+  .avatar-ring {
+    position: absolute; inset: -6px; border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--pink-dark), var(--pink), var(--pink-light), var(--pink), var(--pink-dark));
+    animation: spin 6s linear infinite; filter: blur(1px);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .avatar {
+    position: absolute; inset: 0; border-radius: 50%;
+    background: linear-gradient(135deg, #2a0d1f, #4a1535);
+    display: flex; align-items: center; justify-content: center;
+    border: 4px solid var(--bg-dark); z-index: 2; overflow: hidden;
+  }
+  
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+  .status-dot {
+    position: absolute; bottom: 6px; right: 6px; width: 20px; height: 20px;
+    background: #6bff9e; border: 4px solid var(--bg-dark); border-radius: 50%;
+    z-index: 3; box-shadow: 0 0 12px #6bff9e; animation: pulseDot 2s ease-in-out infinite;
+  }
+  @keyframes pulseDot { 0%, 100% { box-shadow: 0 0 6px #6bff9e; } 50% { box-shadow: 0 0 18px #6bff9e; } }
+
+  .name {
+    font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; letter-spacing: 3px;
+    background: linear-gradient(90deg, #ff69b4, #ffffff, #ff69b4, #ffffff, #ff69b4);
+    background-size: 300% 100%; -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; animation: shimmer 4s linear infinite; margin-bottom: 6px;
+  }
+  @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+
+  .username { font-size: 15px; color: #a08a9a; letter-spacing: 2px; margin-bottom: 14px; }
+  
+  .badge {
+    display: inline-block; padding: 5px 16px; background: rgba(255, 105, 180, 0.12);
+    border: 1px solid rgba(255, 105, 180, 0.4); border-radius: 20px;
+    color: var(--pink-light); font-size: 12px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 22px;
+  }
+  
+  .bio { font-size: 15px; line-height: 1.7; color: #c9b8c4; padding: 0 10px; margin-bottom: 22px; }
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--pink), transparent); margin: 20px 0; opacity: 0.5; }
+
+  .social-links { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+  
+  .link-row {
+    display: flex; align-items: center; gap: 14px; padding: 12px 16px;
+    background: rgba(255, 105, 180, 0.05); border: 1px solid rgba(255, 105, 180, 0.2);
+    border-radius: 12px; text-decoration: none; color: var(--text);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1); cursor: pointer;
+  }
+  
+  .link-row:hover {
+    background: rgba(255, 105, 180, 0.12); border-color: rgba(255, 105, 180, 0.5);
+    transform: translateX(6px); box-shadow: 0 6px 20px rgba(255, 105, 180, 0.2);
+  }
+  
+  .link-icon {
+    width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+    border-radius: 10px; font-size: 20px; flex-shrink: 0;
+  }
+  
+  .link-icon.tiktok   { background: linear-gradient(135deg, #25F4EE, #FE2C55); color: #fff; }
+  .link-icon.discord  { background: linear-gradient(135deg, #5865F2, #8b5cf6); color: #fff; }
+  .link-icon.zalo     { background: linear-gradient(135deg, #0068FF, #00a3ff); color: #fff; }
+
+  .link-info { text-align: left; flex: 1; }
+  .link-name { font-size: 15px; font-weight: 700; color: var(--pink-light); letter-spacing: 1px; }
+  .link-handle { font-size: 13px; color: #8a7580; letter-spacing: 0.5px; margin-top: 2px; }
+  .link-arrow { color: var(--pink); font-size: 18px; opacity: 0.5; transition: all 0.3s ease; }
+  .link-row:hover .link-arrow { opacity: 1; transform: translateX(4px); }
+
+  .footer { margin-top: 25px; font-size: 11px; color: #6a5560; letter-spacing: 2px; text-transform: uppercase; }
+  .footer span { color: var(--pink); }
+
+  @media (max-width: 480px) {
+    .profile-card { padding: 35px 22px 28px; }
+    .name { font-size: 24px; letter-spacing: 2px; }
+    .avatar-wrapper { width: 110px; height: 110px; }
+    .music-bar { bottom: 10px; width: calc(100% - 20px); padding: 8px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="splash-screen" onclick="startExperience()">
+  <div class="splash-content">
+    <div class="splash-title">DUY ANH DEV</div>
+    <div class="splash-sub">Nhấn vào màn hình để vào Profile 🎵</div>
+  </div>
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+</audio>
+
+<div class="music-bar" id="musicBar">
+  <!-- ẢNH BÌA THANH NHẠC ĐÃ ĐƯỢC THAY -->
+  <img class="music-cover" src="https://cdn.phototourl.com/member/2026-10-30-f8ca0fa8-f666-4700-9abc-194d49040490.jpg" alt="Cover">
+  
+  <div class="music-info">
+    <div class="song-title">Nhạc Remix TikTok</div>
+    <div class="song-artist">
+      <div class="playing-bars">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      Duy Anh Playlist
+    </div>
+  </div>
+
+  <button class="play-btn" onclick="toggleMusic(event)">
+    <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  </button>
+</div>
+
+<div class="profile-card">
+  <div class="avatar-wrapper">
+    <div class="avatar-ring"></div>
+    <div class="avatar">
+      <!-- ẢNH ĐẠI DIỆN CHÍNH ĐÃ ĐƯỢC THAY -->
+      <img src="https://cdn.phototourl.com/member/2026-10-30-f8ca0fa8-f666-4700-9abc-194d49040490.jpg" alt="Avatar">
+    </div>
+    <div class="status-dot"></div>
+  </div>
+
+  <h1 class="name">DUY ANH</h1>
+  <p class="username">@vuabakhino1</p>
+  <span class="badge">⚡ Developer</span>
+
+  <p class="bio">
+    Chào mừng đến với không gian của <strong>Duy Anh</strong>. 
+    Kết nối với tao qua các nền tảng bên dưới nhé! 🌸
+  </p>
+
+  <div class="divider"></div>
+
+  <div class="social-links">
+    <a class="link-row" href="https://www.tiktok.com/@vuabakhino1" 
+       data-app="snssdk1128://user/profile/vuabakhino1" data-web="https://www.tiktok.com/@vuabakhino1">
+      <div class="link-icon tiktok">🎵</div>
+      <div class="link-info">
+        <div class="link-name">TikTok</div>
+        <div class="link-handle">@vuabakhino1</div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+
+    <a class="link-row" href="https://discord.com/users/hanhgiatri102" 
+       data-app="discord://-/users/hanhgiatri102" data-web="https://discord.com/users/hanhgiatri102">
+      <div class="link-icon discord">💬</div>
+      <div class="link-info">
+        <div class="link-name">Discord</div>
+        <div class="link-handle">hanhgiatri102</div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+
+    <a class="link-row" href="https://zalo.me/0333088867" 
+       data-app="zalo://conversation?phone=0333088867" data-web="https://zalo.me/0333088867">
+      <div class="link-icon zalo">💙</div>
+      <div class="link-info">
+        <div class="link-name">Zalo</div>
+        <div class="link-handle">033 308 8867</div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+  </div>
+
+  <div class="footer">
+    Made with <span>♥</span> by Duy Anh
+  </div>
+</div>
+
+<script>
+  const bgMusic = document.getElementById('bgMusic');
+  const musicBar = document.getElementById('musicBar');
+  const splash = document.getElementById('splash-screen');
+
+  function startExperience() {
+    splash.classList.add('hidden');
+    bgMusic.play().then(() => {
+      musicBar.classList.add('is-playing');
+    }).catch(error => {
+      console.log("Trình duyệt chặn autoplay, phải bấm nút play.");
+    });
+  }
+
+  function toggleMusic(event) {
+    event.stopPropagation();
+    if (bgMusic.paused) {
+      bgMusic.play();
+      musicBar.classList.add('is-playing');
+    } else {
+      bgMusic.pause();
+      musicBar.classList.remove('is-playing');
+    }
+  }
+
+  document.querySelectorAll('.link-row').forEach(link => {
+    link.addEventListener('click', function(e) {
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (isMobile) {
+        e.preventDefault();
+        const appLink = this.getAttribute('data-app');
+        const webLink = this.getAttribute('data-web');
+        const start = Date.now();
+        window.location.href = appLink;
+        setTimeout(() => {
+          if (Date.now() - start < 2000) {
+            window.location.href = webLink;
+          }
+        }, 1500);
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
