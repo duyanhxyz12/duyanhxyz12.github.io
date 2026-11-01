@@ -185,12 +185,12 @@
   
   .link-icon {
     width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-    border-radius: 10px; font-size: 20px; flex-shrink: 0;
+    border-radius: 10px; font-size: 20px; flex-shrink: 0; color: #fff;
   }
   
-  .link-icon.tiktok   { background: linear-gradient(135deg, #25F4EE, #FE2C55); color: #fff; }
-  .link-icon.discord  { background: linear-gradient(135deg, #5865F2, #8b5cf6); color: #fff; }
-  .link-icon.zalo     { background: linear-gradient(135deg, #0068FF, #00a3ff); color: #fff; }
+  .link-icon.tiktok   { background: linear-gradient(135deg, #25F4EE, #FE2C55); }
+  .link-icon.ff       { background: linear-gradient(135deg, #f39c12, #e67e22); }
+  .link-icon.menu     { background: linear-gradient(135deg, #2ecc71, #27ae60); }
 
   .link-info { text-align: left; flex: 1; }
   .link-name { font-size: 15px; font-weight: 700; color: var(--pink-light); letter-spacing: 1px; }
@@ -219,15 +219,14 @@
 </div>
 
 <audio id="bgMusic" loop>
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+  <source src="nhac.mp3" type="audio/mpeg">
 </audio>
 
 <div class="music-bar" id="musicBar">
-  <!-- ẢNH BÌA THANH NHẠC ĐÃ ĐƯỢC THAY -->
   <img class="music-cover" src="https://cdn.phototourl.com/member/2026-10-30-f8ca0fa8-f666-4700-9abc-194d49040490.jpg" alt="Cover">
   
   <div class="music-info">
-    <div class="song-title">Nhạc Remix TikTok</div>
+    <div class="song-title">Happiness America - Phố Nhạc Gõ</div>
     <div class="song-artist">
       <div class="playing-bars">
         <span></span><span></span><span></span><span></span>
@@ -246,7 +245,6 @@
   <div class="avatar-wrapper">
     <div class="avatar-ring"></div>
     <div class="avatar">
-      <!-- ẢNH ĐẠI DIỆN CHÍNH ĐÃ ĐƯỢC THAY -->
       <img src="https://cdn.phototourl.com/member/2026-10-30-f8ca0fa8-f666-4700-9abc-194d49040490.jpg" alt="Avatar">
     </div>
     <div class="status-dot"></div>
@@ -264,8 +262,7 @@
   <div class="divider"></div>
 
   <div class="social-links">
-    <a class="link-row" href="https://www.tiktok.com/@vuabakhino1" 
-       data-app="snssdk1128://user/profile/vuabakhino1" data-web="https://www.tiktok.com/@vuabakhino1">
+    <a class="link-row" href="https://www.tiktok.com/@vuabakhino1">
       <div class="link-icon tiktok">🎵</div>
       <div class="link-info">
         <div class="link-name">TikTok</div>
@@ -274,22 +271,20 @@
       <div class="link-arrow">→</div>
     </a>
 
-    <a class="link-row" href="https://discord.com/users/hanhgiatri102" 
-       data-app="discord://-/users/hanhgiatri102" data-web="https://discord.com/users/hanhgiatri102">
-      <div class="link-icon discord">💬</div>
+    <a class="link-row" href="https://link4m.org/NtcGp" target="_blank">
+      <div class="link-icon ff">🔥</div>
       <div class="link-info">
-        <div class="link-name">Discord</div>
-        <div class="link-handle">hanhgiatri102</div>
+        <div class="link-name">FF</div>
+        <div class="link-handle">Bấm để xem</div>
       </div>
       <div class="link-arrow">→</div>
     </a>
 
-    <a class="link-row" href="https://zalo.me/0333088867" 
-       data-app="zalo://conversation?phone=0333088867" data-web="https://zalo.me/0333088867">
-      <div class="link-icon zalo">💙</div>
+    <a class="link-row" href="https://link4m.org/T8tJKu" target="_blank">
+      <div class="link-icon menu">📋</div>
       <div class="link-info">
-        <div class="link-name">Zalo</div>
-        <div class="link-handle">033 308 8867</div>
+        <div class="link-name">Menu</div>
+        <div class="link-handle">Bấm để xem</div>
       </div>
       <div class="link-arrow">→</div>
     </a>
@@ -324,25 +319,7 @@
       musicBar.classList.remove('is-playing');
     }
   }
-
-  document.querySelectorAll('.link-row').forEach(link => {
-    link.addEventListener('click', function(e) {
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      if (isMobile) {
-        e.preventDefault();
-        const appLink = this.getAttribute('data-app');
-        const webLink = this.getAttribute('data-web');
-        const start = Date.now();
-        window.location.href = appLink;
-        setTimeout(() => {
-          if (Date.now() - start < 2000) {
-            window.location.href = webLink;
-          }
-        }, 1500);
-      }
-    });
-  });
 </script>
 
 </body>
-</html>
+ </html>
